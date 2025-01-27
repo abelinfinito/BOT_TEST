@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Previsões</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .circle {
+            width: 200px;
+            height: 200px;
+            border: 5px solid green;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+        }
+
+        .circle h1 {
+            font-size: 30px;
+            color: red;
+            margin: 0;
+        }
+
+        .button {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 35px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button:hover {
+            background-color: darkgreen;
+        }
+
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #fff;
+            border-top: 3px solid #d32f2f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .history {
+            margin: 60px auto;
+            max-width: 300px;
+            text-align: left;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .history h2 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            text-align: center;
+            color: #333;
+        }
+
+        .history ul {
+            list-style: none;
+            padding: 20;
+            margin: 0;
+        }
+
+        .history li {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .history li:last-child {
+            border-bottom: none;
+        }
+
+        .blue {
+            background-color: #2196F3; /* Azul */
+        }
+
+        .purple {
+            background-color: #9C27B0; /* Roxo */
+        }
+
+        .pink {
+            background-color: #E91E63; /* Rosa */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">AVIATOR PREVISÕES</div>
+    <div class="circle">
+        <h1 id="multiplier">00.00x</h1>
+    </div>
+    <button class="button" id="actionButton" onclick="nextPrediction()">
+        <span id="buttonText">PRÓXIMO</span>
+        <div class="loader" id="buttonLoader"></div>
+    </button>
+
+    <div class="history">
+        <h2>Histórico de Velas</h2>
+        <ul id="historyList"></ul>
+    </div>
+
+    <script>
+        // Números predefinidos que você escolheu
+        const predefinedNumbers = ["1.68x", "1.24x", "6.19x","1.52x", "1.21x", "Erro ao gerar vela..aguarda porfavor"];
+        let currentIndex = 0;
+
+        function nextPrediction() {
+            const button = document.getElementById("actionButton");
+            const buttonText = document.getElementById("buttonText");
+            const buttonLoader = document.getElementById("buttonLoader");
+
+            // Mostrar a animação e ocultar o texto do botão
+            buttonText.style.display = "none";
+            buttonLoader.style.display = "block";
+
+            // Simular um processamento de 3 segundos
+            setTimeout(() => {
+                // Atualiza o próximo número
+                const currentNumber = predefinedNumbers[currentIndex];
+                document.getElementById("multiplier").textContent = currentNumber;
+
+                // Adiciona o número ao histórico
+                addToHistory(currentNumber);
+
+                // Atualiza o índice
+                currentIndex = (currentIndex + 1) % predefinedNumbers.length;
+
+                // Restaurar o texto do botão e esconder a animação
+                buttonText.style.display = "block";
+                buttonLoader.style.display = "none";
+            }, 3000);
+        }
+
+        function addToHistory(number) {
+            const historyList = document.getElementById("historyList");
+            const newEntry = document.createElement("li");
+            newEntry.textContent = number;
+
+            // Adicionar classe de cor com base no valor
+            const value = parseFloat(number.replace("x", ""));
+            if (value < 2.00) {
+                newEntry.classList.add("blue");
+            } else if (value >= 2.00 && value < 10.00) {
+                newEntry.classList.add("purple");
+            } else if (value >= 10.00) {
+                newEntry.classList.add("pink");
+            }
+
+            // Adiciona o novo número no topo do histórico
+            historyList.insertBefore(newEntry, historyList.firstChild);
+        }
+    </script>
+</body>
+</html>
